@@ -1,0 +1,26 @@
+{
+  "category": [
+    {
+      "id": "1",
+      "name": "Du lịch biển",
+      "description": "Tour nghỉ dưỡng biển"
+    },
+    {
+      "name": "Du lịch núi ",
+      "description": "Tour leo núi, khám phá",
+      "id": "2"
+    }
+  ],
+  "tour": [
+    {
+      "id": "1",
+      "name": "Tour Đà Nẵng 4N3Đ",
+      "category_id": 1,
+      "price": 5500000,
+      "status": "active",
+      "image": "https://picsum.photos/300/200",
+      "description": "Tham quan Đà Nẵng – Hội An",
+      "policy": "Không hoàn tiền"
+    }
+  ]
+}
