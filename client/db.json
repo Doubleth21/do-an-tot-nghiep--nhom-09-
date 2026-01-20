@@ -13,14 +13,33 @@
   ],
   "tour": [
     {
-      "id": "1",
       "name": "Tour Đà Nẵng 4N3Đ",
       "category_id": 1,
+      "supplier": "Công ty Du lịch ABC",
       "price": 5500000,
       "status": "active",
-      "image": "https://picsum.photos/300/200",
       "description": "Tham quan Đà Nẵng – Hội An",
-      "policy": "Không hoàn tiền"
+      "policy": "Không hoàn tiền",
+      "images": [
+        "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800",
+        "blob:http://localhost:5173/99348dcb-43eb-4da5-b6ef-c4160a5a09ed"
+      ],
+      "id": "1"
+    },
+    {
+      "name": "du lịch núi",
+      "category_id": "2",
+      "supplier": "abcxyz",
+      "price": 500001,
+      "status": "draft",
+      "description": "hahaahhah",
+      "policy": "fghhg",
+      "images": [
+        "https://picsum.photos/800/600",
+        "blob:http://localhost:5173/4114be29-d276-4feb-a6c4-3bf056c4507a",
+        "blob:http://localhost:5173/485b6368-97f3-4ddc-86aa-683ee62db7cd"
+      ],
+      "id": "2dbe"
     }
   ]
 }
