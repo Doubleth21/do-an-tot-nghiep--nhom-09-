@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 21, 2026 at 07:18 AM
+-- Generation Time: Jan 21, 2026 at 08:17 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.2.20
 
@@ -97,6 +97,30 @@ INSERT INTO `booking` (`booking_id`, `customer_id`, `tour_id`, `schedule_id`, `b
 (13, 5, 1, 1, '2025-12-02 13:13:08', 1, 5500000.00, 'upcoming', 'deposit', ''),
 (14, 10, 1, 17, '2025-12-03 12:28:46', 2, 11000000.00, 'ongoing', 'unpaid', ''),
 (15, 8, 6, 18, '2025-12-04 13:14:23', 4, 18000000.00, 'completed', 'paid', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache`
+--
+
+CREATE TABLE `cache` (
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache_locks`
+--
+
+CREATE TABLE `cache_locks` (
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -223,6 +247,22 @@ INSERT INTO `driver` (`driver_id`, `fullname`, `phone`, `license_plate`, `vehicl
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `failed_jobs`
+--
+
+CREATE TABLE `failed_jobs` (
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `feedback`
 --
 
@@ -331,6 +371,96 @@ INSERT INTO `itinerary` (`itinerary_id`, `tour_id`, `day_number`, `title`, `desc
 (7, 8, 2, 'Phú Quốc: Vinpearl Safari, Bãi Sao', 'Tham quan khu bảo tồn động vật hoang dã và tắm biển.', 'Phú Quốc', '09:00:00', '17:00:00'),
 (9, 4, 3, 'Seoul: Tháp Namsan', 'Ngắm toàn cảnh thành phố Seoul.', 'Seoul, Hàn Quốc', '18:00:00', '21:00:00'),
 (10, 5, 2, 'Đà Nẵng: Bà Nà Hills', 'Khám phá khu du lịch Bà Nà Hills.', 'Đà Nẵng', '08:00:00', '18:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jobs`
+--
+
+CREATE TABLE `jobs` (
+  `id` bigint UNSIGNED NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint UNSIGNED NOT NULL,
+  `reserved_at` int UNSIGNED DEFAULT NULL,
+  `available_at` int UNSIGNED NOT NULL,
+  `created_at` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `job_batches`
+--
+
+CREATE TABLE `job_batches` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_jobs` int NOT NULL,
+  `pending_jobs` int NOT NULL,
+  `failed_jobs` int NOT NULL,
+  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `cancelled_at` int DEFAULT NULL,
+  `created_at` int NOT NULL,
+  `finished_at` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(3, '0001_01_01_000000_create_users_table', 1),
+(4, '0001_01_01_000001_create_cache_table', 1),
+(5, '0001_01_01_000002_create_jobs_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('nlUYnLde4Ux06qWwPQ0bWQjEXdEd9zNq1ABHQg95', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiN1l1VzE1TzVRWE9US1BoSFBTWVBsYTh2Q1JBVkY5bzhhdDZMelhtNyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1768982477);
 
 -- --------------------------------------------------------
 
@@ -445,9 +575,10 @@ CREATE TABLE `users` (
   `fullname` varchar(100) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
-  `role` enum('admin','hdv','user') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'user',
+  `role` enum('admin','tour_guide','user') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'user',
   `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'active',
-  `created_at` datetime DEFAULT (now())
+  `created_at` datetime DEFAULT (now()),
+  `updated_at` datetime DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -456,10 +587,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `fullname`, `email`, `phone`, `role`, `status`, `created_at`) VALUES
 (1, 'admin_nhom5', '123456', 'Quản trị viên Nhóm 5', 'nhom5@gmail.com', '0900000001', 'admin', 'active', '2025-12-02 14:29:16'),
-(2, 'hdv_nga', '123456', 'Nguyễn Thị Nga', 'nga.hdv@example.com', '0910000002', 'hdv', 'active', '2025-12-02 14:29:16'),
-(3, 'hdv_binh', '123456', 'Trần Văn Bình', 'binh.hdv@example.com', '0920000003', 'hdv', 'active', '2025-12-02 14:29:16'),
-(4, 'hdv_lan', '123456', 'Lê Thị Lan', 'lan.hdv@example.com', '0930000004', 'hdv', 'active', '2025-12-02 14:29:16'),
-(5, 'hdv_hung', '123456', 'Phạm Quốc Hùng', 'hung.hdv@example.com', '0940000005', 'hdv', 'active', '2025-12-02 14:29:16'),
+(2, 'hdv_nga', '123456', 'Nguyễn Thị Nga', 'nga.hdv@example.com', '0910000002', 'tour_guide', 'active', '2025-12-02 14:29:16'),
+(3, 'hdv_binh', '123456', 'Trần Văn Bình', 'binh.hdv@example.com', '0920000003', 'tour_guide', 'active', '2025-12-02 14:29:16'),
+(4, 'hdv_lan', '123456', 'Lê Thị Lan', 'lan.hdv@example.com', '0930000004', 'tour_guide', 'active', '2025-12-02 14:29:16'),
+(5, 'hdv_hung', '123456', 'Phạm Quốc Hùng', 'hung.hdv@example.com', '0940000005', 'tour_guide', 'active', '2025-12-02 14:29:16'),
 (11, 'tuandat', '123456', 'Nguyen Tuan Dat', 'tuandathb102@gmail.com', '0858092004', 'user', 'active', '2026-01-21 12:41:24');
 
 --
@@ -483,6 +614,20 @@ ALTER TABLE `booking`
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `tour_id` (`tour_id`),
   ADD KEY `schedule_id` (`schedule_id`);
+
+--
+-- Indexes for table `cache`
+--
+ALTER TABLE `cache`
+  ADD PRIMARY KEY (`key`),
+  ADD KEY `cache_expiration_index` (`expiration`);
+
+--
+-- Indexes for table `cache_locks`
+--
+ALTER TABLE `cache_locks`
+  ADD PRIMARY KEY (`key`),
+  ADD KEY `cache_locks_expiration_index` (`expiration`);
 
 --
 -- Indexes for table `category`
@@ -512,6 +657,13 @@ ALTER TABLE `driver`
   ADD PRIMARY KEY (`driver_id`);
 
 --
+-- Indexes for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
 -- Indexes for table `feedback`
 --
 ALTER TABLE `feedback`
@@ -537,6 +689,39 @@ ALTER TABLE `hotel`
 ALTER TABLE `itinerary`
   ADD PRIMARY KEY (`itinerary_id`),
   ADD KEY `tour_id` (`tour_id`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jobs_queue_index` (`queue`);
+
+--
+-- Indexes for table `job_batches`
+--
+ALTER TABLE `job_batches`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessions_user_id_index` (`user_id`),
+  ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
 -- Indexes for table `tour`
@@ -609,6 +794,12 @@ ALTER TABLE `driver`
   MODIFY `driver_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
@@ -631,6 +822,18 @@ ALTER TABLE `hotel`
 --
 ALTER TABLE `itinerary`
   MODIFY `itinerary_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tour`
