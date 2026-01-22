@@ -88,4 +88,8 @@ class User extends Authenticatable
     public function isRegularUser(){
         return $this->role === self::ROLE_USER;
     }
+    // Kiểm tra xem người dùng có phải là user thường hay không
+    public function isha(){
+        return $this->role === self::ROLE_USER;
+    }
 }
