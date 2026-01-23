@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 21, 2026 at 08:17 AM
+-- Generation Time: Jan 23, 2026 at 09:50 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.2.20
 
@@ -426,7 +426,8 @@ CREATE TABLE `migrations` (
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (3, '0001_01_01_000000_create_users_table', 1),
 (4, '0001_01_01_000001_create_cache_table', 1),
-(5, '0001_01_01_000002_create_jobs_table', 1);
+(5, '0001_01_01_000002_create_jobs_table', 1),
+(6, '2026_01_21_082433_create_personal_access_tokens_table', 2);
 
 -- --------------------------------------------------------
 
@@ -439,6 +440,35 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personal_access_tokens`
+--
+
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint UNSIGNED NOT NULL,
+  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `personal_access_tokens`
+--
+
+INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
+(1, 'App\\Models\\User', 13, 'auth_token', '4cd754a1ceef80bfb87451b4f88e1e2e598927df8f43d2703f82256e2f2a9dd9', '[\"*\"]', NULL, NULL, '2026-01-21 01:30:14', '2026-01-21 01:30:14'),
+(3, 'App\\Models\\User', 12, 'auth_token', '2b42b026fbb7009b681ba3763d5f3c0c9fc3215463c255e5784f680a4bf8b6f4', '[\"*\"]', '2026-01-23 02:32:46', NULL, '2026-01-21 01:36:33', '2026-01-23 02:32:46'),
+(4, 'App\\Models\\User', 13, 'auth_token', 'b48e283d944440ada8d939c8e39ae51276f9cff3487a7a0c9e160397c8cf05bc', '[\"*\"]', NULL, NULL, '2026-01-23 02:23:08', '2026-01-23 02:23:08'),
+(5, 'App\\Models\\User', 13, 'auth_token', '8e233c2d16cd8fdb2bbac10a8a8d858796a0465be65c85bc956d5e0bdde65819', '[\"*\"]', NULL, NULL, '2026-01-23 02:29:09', '2026-01-23 02:29:09');
 
 -- --------------------------------------------------------
 
@@ -577,21 +607,22 @@ CREATE TABLE `users` (
   `phone` varchar(15) DEFAULT NULL,
   `role` enum('admin','tour_guide','user') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'user',
   `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'active',
-  `created_at` datetime DEFAULT (now()),
-  `updated_at` datetime DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password`, `fullname`, `email`, `phone`, `role`, `status`, `created_at`) VALUES
-(1, 'admin_nhom5', '123456', 'Quản trị viên Nhóm 5', 'nhom5@gmail.com', '0900000001', 'admin', 'active', '2025-12-02 14:29:16'),
-(2, 'hdv_nga', '123456', 'Nguyễn Thị Nga', 'nga.hdv@example.com', '0910000002', 'tour_guide', 'active', '2025-12-02 14:29:16'),
-(3, 'hdv_binh', '123456', 'Trần Văn Bình', 'binh.hdv@example.com', '0920000003', 'tour_guide', 'active', '2025-12-02 14:29:16'),
-(4, 'hdv_lan', '123456', 'Lê Thị Lan', 'lan.hdv@example.com', '0930000004', 'tour_guide', 'active', '2025-12-02 14:29:16'),
-(5, 'hdv_hung', '123456', 'Phạm Quốc Hùng', 'hung.hdv@example.com', '0940000005', 'tour_guide', 'active', '2025-12-02 14:29:16'),
-(11, 'tuandat', '123456', 'Nguyen Tuan Dat', 'tuandathb102@gmail.com', '0858092004', 'user', 'active', '2026-01-21 12:41:24');
+INSERT INTO `users` (`user_id`, `username`, `password`, `fullname`, `email`, `phone`, `role`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'admin_nhom5', '123456', 'Quản trị viên Nhóm 5', 'nhom5@gmail.com', '0900000001', 'admin', 'active', '2026-01-21 15:22:50', '2026-01-21 15:22:50'),
+(2, 'hdv_nga', '123456', 'Nguyễn Thị Nga', 'nga.hdv@example.com', '0910000002', 'tour_guide', 'active', '2026-01-21 15:22:50', '2026-01-21 15:22:50'),
+(3, 'hdv_binh', '123456', 'Trần Văn Bình', 'binh.hdv@example.com', '0920000003', 'tour_guide', 'active', '2026-01-21 15:22:50', '2026-01-21 15:22:50'),
+(4, 'hdv_lan', '123456', 'Lê Thị Lan', 'lan.hdv@example.com', '0930000004', 'tour_guide', 'active', '2026-01-21 15:22:50', '2026-01-21 15:22:50'),
+(5, 'hdv_hung', '123456', 'Phạm Quốc Hùng', 'hung.hdv@example.com', '0940000005', 'tour_guide', 'active', '2026-01-21 15:22:50', '2026-01-21 15:22:50'),
+(12, 'john_doe', '$2y$12$7jCQwMlEtRlaPbtyYczdOuAZ7TtLGHbmZ0yq6J6amN25wXWllzZda', 'John Doe', 'john@example.com', '0123456789', 'user', 'active', '2026-01-21 08:23:10', '2026-01-21 08:23:10'),
+(13, 'tuandat', '$2y$12$h4qYWyGJjP72NoEYVGXOfegLqLaeNtioFFbX90s73xlSMVIdLn.Cu', 'Tuan Dat', 'tuandathb102@gmail.com', '0123456789', 'user', 'active', '2026-01-21 08:30:14', '2026-01-21 08:30:14');
 
 --
 -- Indexes for dumped tables
@@ -716,6 +747,15 @@ ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
 
 --
+-- Indexes for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`),
+  ADD KEY `personal_access_tokens_expires_at_index` (`expires_at`);
+
+--
 -- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
@@ -833,7 +873,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tour`
@@ -857,7 +903,7 @@ ALTER TABLE `tour_hotel`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
