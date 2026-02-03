@@ -40,16 +40,16 @@ Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     // Đặt tour mới
     Route::post('/booking', [BookingController::class, 'store']);
-    
+
     // Lấy booking của user hiện tại
     Route::get('/booking', [BookingController::class, 'index']);
-    
+
     // Xem chi tiết booking
     Route::get('/booking/{id}', [BookingController::class, 'show']);
-    
+
     // Cập nhật booking
     Route::put('/booking/{id}', [BookingController::class, 'update']);
-    
+
     // Xóa booking
     Route::delete('/booking/{id}', [BookingController::class, 'destroy']);
 });
@@ -65,11 +65,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // Admin routes sẽ được thêm ở đây
         // Quản lý Tour (Admin / Tour Guide)
         Route::apiResource('tour', TourController::class);
-        
+
         // Lấy booking của 1 tour
         Route::get('/tour/{tour_id}/bookings', [BookingController::class, 'tourBookings']);
     });
-    
+
     // Chỉ Admin
     Route::middleware('check.role:admin')->group(function () {
         // Lấy booking của 1 user

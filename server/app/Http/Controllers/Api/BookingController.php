@@ -14,7 +14,7 @@ class BookingController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        
+
         if ($user && $user->role === 'admin') {
             // Admin xem tất cả booking
             $bookings = Booking::with(['user', 'tour'])->get();
@@ -24,7 +24,7 @@ class BookingController extends Controller
                 ->with(['user', 'tour'])
                 ->get();
         }
-        
+
         return response()->json($bookings);
     }
 
@@ -32,7 +32,7 @@ class BookingController extends Controller
     public function show($id)
     {
         $booking = Booking::with(['user', 'tour'])->find($id);
-        
+
         if (!$booking) {
             return response()->json(['message' => 'Booking not found'], 404);
         }
@@ -96,7 +96,7 @@ class BookingController extends Controller
         }
 
         $user = auth()->user();
-        
+
         // Chỉ chủ booking hoặc admin mới cập nhật được
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -134,7 +134,7 @@ class BookingController extends Controller
         }
 
         $user = auth()->user();
-        
+
         // Chỉ chủ booking hoặc admin mới xóa được
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -156,7 +156,7 @@ class BookingController extends Controller
     public function userBookings($user_id)
     {
         $user = auth()->user();
-        
+
         if ($user->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -172,7 +172,7 @@ class BookingController extends Controller
     public function tourBookings($tour_id)
     {
         $user = auth()->user();
-        
+
         if (!in_array($user->role, ['admin', 'tour_guide'])) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
