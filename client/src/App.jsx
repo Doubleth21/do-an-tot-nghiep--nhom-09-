@@ -12,6 +12,9 @@ import GuideDashboard from "./pages/Guide/Dashboard.jsx";
 import GuideBookings from "./pages/Guide/Bookings.jsx";
 import GuideTours from "./pages/Guide/Tours.jsx";
 import GuideProfile from "./pages/Guide/Profile.jsx";
+import UserList from "./pages/Admin/Users/List.jsx";
+import AddUser from "./pages/Admin/Users/Add.jsx";
+import EditUser from "./pages/Admin/Users/Edit.jsx";
 
 function App() {
   return (
@@ -24,6 +27,9 @@ function App() {
           <Route path="tours" element={<TourList />} />
           <Route path="tours/add" element={<TourForm />} />
           <Route path="tours/edit/:id" element={<EditTour />} />
+          <Route path="users" element={<UserList />} />
+          <Route path="users/add" element={<AddUser />} />
+          <Route path="users/edit/:id" element={<EditUser />} />
 
         </Route>
         {/* Route cho Guide */}
