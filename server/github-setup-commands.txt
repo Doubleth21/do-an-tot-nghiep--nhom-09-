@@ -1,0 +1,27 @@
+# 🚀 LỆNH SETUP GITHUB CHO TOUR MANAGEMENT
+
+# Bước 1: Cập nhật remote URL (thay YOUR_USERNAME bằng username GitHub của bạn)
+git remote set-url origin https://github.com/YOUR_USERNAME/tour-management.git
+
+# Bước 2: Kiểm tra remote
+git remote -v
+
+# Bước 3: Push code lên GitHub
+git push -u origin master
+
+# Nếu bị lỗi "master" không tồn tại, dùng:
+git push -u origin main
+
+# Hoặc đổi tên branch:
+git branch -M main
+git push -u origin main
+
+# 📋 KIỂM TRA TRƯỚC KHI PUSH:
+# - Repository đã tạo trên GitHub chưa?
+# - URL remote đã đúng chưa?
+# - Code đã commit local chưa?
+
+# 🔍 LỆNH KIỂM TRA:
+git status
+git log --oneline -5
+git remote -v
