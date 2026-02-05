@@ -149,7 +149,8 @@ class AuthController extends Controller
     private function getRedirectPath($role)
     {
         return match ($role) {
-            User::ROLE_ADMIN, User::ROLE_TOUR_GUIDE => '/admin',
+            User::ROLE_ADMIN => '/admin',
+            User::ROLE_TOUR_GUIDE => '/tourguide',
             User::ROLE_USER => '/',
             default => '/',
         };
