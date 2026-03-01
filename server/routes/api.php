@@ -45,7 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Đặt tour mới
     Route::post('/booking', [BookingController::class, 'store']);
 
-    // Lấy booking của user hiện tại
+    // Lấy booking của user hiện tại (user) hoặc tất cả (admin)
     Route::get('/booking', [BookingController::class, 'index']);
 
     // Xem chi tiết booking
@@ -53,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Cập nhật booking
     Route::put('/booking/{id}', [BookingController::class, 'update']);
+
+    // Yêu cầu huỷ tour (user)
+    Route::post('/booking/{id}/cancel-request', [BookingController::class, 'requestCancel']);
 
     // Xóa booking
     Route::delete('/booking/{id}', [BookingController::class, 'destroy']);
