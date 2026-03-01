@@ -15,10 +15,13 @@ class BookingController extends Controller
     public function index(Request $request)
     {
         $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         $status = $request->query('status'); // pending, confirmed, cancel_requested, cancelled, completed
 
         $query = Booking::with(['user', 'tour']);
-        if ($user && $user->role !== 'admin') {
+        if ($user->role !== 'admin') {
             $query->where('user_id', $user->user_id);
         }
 
@@ -41,6 +44,9 @@ class BookingController extends Controller
 
         // Kiểm tra quyền: chỉ chủ booking hoặc admin mới xem được
         $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -59,6 +65,9 @@ class BookingController extends Controller
         ]);
 
         $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         $tour = Tour::find($validated['tour_id']);
 
         if (!$tour) {
@@ -98,6 +107,9 @@ class BookingController extends Controller
         }
 
         $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
         // Chỉ chủ booking hoặc admin mới cập nhật được
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
@@ -178,6 +190,9 @@ class BookingController extends Controller
         }
 
         $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
         // Chỉ chủ booking hoặc admin mới xóa được
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
@@ -200,6 +215,9 @@ class BookingController extends Controller
     public function userBookings($user_id)
     {
         $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
         if ($user->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -216,6 +234,9 @@ class BookingController extends Controller
     public function tourBookings($tour_id)
     {
         $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
         if (!in_array($user->role, ['admin', 'tour_guide'])) {
             return response()->json(['message' => 'Unauthorized'], 403);
