@@ -28,6 +28,10 @@ Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
     // Lấy thông tin người dùng hiện tại
     Route::get('/me', [AuthController::class, 'me']);
 
+    // Cập nhật profile và mật khẩu
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/password', [AuthController::class, 'changePassword']);
+
     // Đăng xuất
     Route::post('/logout', [AuthController::class, 'logout']);
 });
@@ -41,7 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Đặt tour mới
     Route::post('/booking', [BookingController::class, 'store']);
 
-    // Lấy booking của user hiện tại
+    // Lấy booking của user hiện tại (user) hoặc tất cả (admin)
     Route::get('/booking', [BookingController::class, 'index']);
 
     // Xem chi tiết booking
@@ -49,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Cập nhật booking
     Route::put('/booking/{id}', [BookingController::class, 'update']);
+
+    // Yêu cầu huỷ tour (user)
+    Route::post('/booking/{id}/cancel-request', [BookingController::class, 'requestCancel']);
 
     // Xóa booking
     Route::delete('/booking/{id}', [BookingController::class, 'destroy']);
@@ -74,6 +81,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('check.role:admin')->group(function () {
         // Lấy booking của 1 user
         Route::get('/user/{user_id}/bookings', [BookingController::class, 'userBookings']);
+
+        // Quản lý người dùng (danh sách, xem, cập nhật role/status, xóa)
+        Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     });
 });
 

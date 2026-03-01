@@ -41,5 +41,35 @@
       ],
       "id": "2dbe"
     }
+  ],
+  "users": [
+    {
+      "username": "thanh",
+      "fullname": "thanh nguyen",
+      "email": "hh@gmail.com",
+      "phone": "1234565",
+      "status": 1,
+      "cccd": "",
+      "language": "",
+      "certificate": "",
+      "experience": "",
+      "specialization": "",
+      "role": "admin",
+      "id": "dc97"
+    },
+    {
+      "username": "thanhhh",
+      "fullname": "nguyễn văn a 123",
+      "email": "hh@gmail.com",
+      "phone": "0332155445",
+      "status": 1,
+      "cccd": "02254545458",
+      "language": "anh, nhật",
+      "certificate": "hpv",
+      "experience": "2 năm",
+      "specialization": "du lịch",
+      "role": "guide",
+      "id": "1861"
+    }
   ]
 }

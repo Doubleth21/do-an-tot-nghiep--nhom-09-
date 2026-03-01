@@ -74,7 +74,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         {
             group: "Người dùng",
             items: [
-                { icon: <Users size={20} />, text: "Khách hàng", path: "/admin/customers" },
+                { icon: <Users size={20} />, text: "Khách hàng", path: "/admin/users" },
                 { icon: <Settings size={20} />, text: "Cài đặt", path: "/admin/settings" },
             ]
         }
