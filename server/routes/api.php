@@ -28,6 +28,10 @@ Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
     // Lấy thông tin người dùng hiện tại
     Route::get('/me', [AuthController::class, 'me']);
 
+    // Cập nhật profile và mật khẩu
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/password', [AuthController::class, 'changePassword']);
+
     // Đăng xuất
     Route::post('/logout', [AuthController::class, 'logout']);
 });
@@ -74,6 +78,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('check.role:admin')->group(function () {
         // Lấy booking của 1 user
         Route::get('/user/{user_id}/bookings', [BookingController::class, 'userBookings']);
+
+        // Quản lý người dùng (danh sách, xem, cập nhật role/status, xóa)
+        Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     });
 });
 
