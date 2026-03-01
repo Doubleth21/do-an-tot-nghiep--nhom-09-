@@ -144,6 +144,60 @@ class AuthController extends Controller
     }
 
     /**
+     * Cập nhật thông tin cá nhân của người dùng (username, email, fullname, phone)
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        // Validation, bỏ qua chính bản thân khi kiểm tra unique
+        $validated = $request->validate([
+            'username' => 'sometimes|required|string|min:3|max:255|unique:users,username,'.$user->user_id.',user_id',
+            'email'    => 'sometimes|required|email|unique:users,email,'.$user->user_id.',user_id',
+            'fullname' => 'sometimes|required|string|max:255',
+            'phone'    => 'sometimes|required|string|max:20',
+        ]);
+
+        $user->fill($validated);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật thông tin thành công',
+            'user' => $user,
+        ], 200);
+    }
+
+    /**
+     * Thay đổi mật khẩu hiện tại
+     */
+    public function changePassword(Request $request)
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'current_password'      => 'required|string',
+            'new_password'          => 'required|string|min:6|confirmed',
+        ]);
+
+        // kiểm tra mật khẩu hiện tại
+        if (!Hash::check($validated['current_password'], $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mật khẩu hiện tại không đúng',
+            ], 422);
+        }
+
+        $user->password = Hash::make($validated['new_password']);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Đổi mật khẩu thành công',
+        ], 200);
+    }
+
+    /**
      * Xác định trang điều hướng dựa trên role của người dùng
      */
     private function getRedirectPath($role)
