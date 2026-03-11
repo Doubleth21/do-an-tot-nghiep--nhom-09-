@@ -8,3 +8,6 @@ export const deleteUser = (id) => axiosClient.delete(`/users/${id}`);
 // Hàm đổi trạng thái nhanh
 export const toggleUserStatus = (id, currentStatus) =>
     axiosClient.patch(`/users/${id}`, { status: currentStatus === 1 ? 0 : 1 });
+
+// authentication
+export const login = (data) => axiosClient.post("/auth/login", data);

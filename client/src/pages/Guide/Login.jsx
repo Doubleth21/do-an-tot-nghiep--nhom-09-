@@ -1,20 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login as apiLogin } from "../../api/user";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Thay bằng logic gọi API thực tế và lưu token
-    if (username === "admin" && password === "123456") {
+    try {
       setError("");
-      navigate("/guide");
-    } else {
-      setError("Tên đăng nhập hoặc mật khẩu không đúng.");
+      // gọi API đăng nhập
+      const { data } = await apiLogin({
+        email: email,
+        password,
+      });
+
+      // lưu token và user vào localStorage/hoặc state quản lý
+      if (data.token) {
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("auth_user", JSON.stringify(data.user));
+      }
+
+      // điều hướng theo backend trả về hoặc mặc định
+      const redirect = data.redirect || "/guide";
+      navigate(redirect);
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Đã có lỗi xảy ra";
+      setError(msg);
     }
   };
 
@@ -26,11 +42,11 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-slate-700 mb-2">Tên đăng nhập</label>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Email</label>
             <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium"
             />
