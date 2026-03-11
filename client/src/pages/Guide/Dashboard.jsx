@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axiosClient from "../../api/axios";
 
 const Dashboard = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        const resp = await axiosClient.get("/auth/me");
+        if (mounted && resp.data && resp.data.user) setUser(resp.data.user);
+      } catch  {
+        // ignore
+      }
+    };
+
+    load();
+    return () => (mounted = false);
+  }, []);
+
   return (
     <div className="max-w-6xl mx-auto pb-20 p-4 animate-in fade-in duration-500">
       <div className="flex items-center gap-4 mb-8">
@@ -32,8 +50,8 @@ const Dashboard = () => {
           <Link to="/guide/profile" className="block no-underline">
             <div className="p-6 rounded-[1.5rem] bg-slate-50 hover:bg-white transition-colors border border-slate-100">
               <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Hồ sơ</h3>
-              <p className="text-lg font-bold text-slate-800">Nguyễn Văn A</p>
-              <p className="text-xs text-slate-400 mt-2">Email: guide@example.com</p>
+              <p className="text-lg font-bold text-slate-800">{user?.fullname || "Nguyễn Văn A"}</p>
+              <p className="text-xs text-slate-400 mt-2">Email: {user?.email || "guide@example.com"}</p>
             </div>
           </Link>
         </div>

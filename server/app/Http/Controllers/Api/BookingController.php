@@ -13,7 +13,7 @@ class BookingController extends Controller
     // GET /api/booking - Lấy tất cả booking (admin xem tất cả, user xem của mình)
     public function index(Request $request)
     {
-        $user = auth()->user();
+        $user = auth('api')->user();
 
         if ($user && $user->role === 'admin') {
             // Admin xem tất cả booking
@@ -38,7 +38,7 @@ class BookingController extends Controller
         }
 
         // Kiểm tra quyền: chỉ chủ booking hoặc admin mới xem được
-        $user = auth()->user();
+        $user = auth('api')->user();
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -56,7 +56,7 @@ class BookingController extends Controller
             'travel_date' => 'nullable|date|after_or_equal:today',
         ]);
 
-        $user = auth()->user();
+        $user = auth('api')->user();
         $tour = Tour::find($validated['tour_id']);
 
         if (!$tour) {
@@ -95,7 +95,7 @@ class BookingController extends Controller
             return response()->json(['message' => 'Booking not found'], 404);
         }
 
-        $user = auth()->user();
+        $user = auth('api')->user();
 
         // Chỉ chủ booking hoặc admin mới cập nhật được
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
@@ -133,7 +133,7 @@ class BookingController extends Controller
             return response()->json(['message' => 'Booking not found'], 404);
         }
 
-        $user = auth()->user();
+        $user = auth('api')->user();
 
         // Chỉ chủ booking hoặc admin mới xóa được
         if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
@@ -155,7 +155,7 @@ class BookingController extends Controller
     // GET /api/booking/user/{user_id} - Lấy tất cả booking của 1 user (Admin only)
     public function userBookings($user_id)
     {
-        $user = auth()->user();
+        $user = auth('api')->user();
 
         if ($user->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -171,7 +171,7 @@ class BookingController extends Controller
     // GET /api/booking/tour/{tour_id} - Lấy tất cả booking của 1 tour (Admin/TourGuide only)
     public function tourBookings($tour_id)
     {
-        $user = auth()->user();
+        $user = auth('api')->user();
 
         if (!in_array($user->role, ['admin', 'tour_guide'])) {
             return response()->json(['message' => 'Unauthorized'], 403);
