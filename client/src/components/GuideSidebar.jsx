@@ -1,6 +1,7 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, CalendarCheck, Map, User, LogOut, ChevronLeft, ChevronRight, Sailboat } from "lucide-react";
+import axiosClient from "../api/axios";
 
 const NavItem = ({ icon, text, path, isOpen }) => {
   const location = useLocation();
@@ -15,6 +16,22 @@ const NavItem = ({ icon, text, path, isOpen }) => {
 };
 
 const GuideSidebar = ({ isOpen, setIsOpen }) => {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        const resp = await axiosClient.get('/auth/me');
+        if (mounted && resp.data && resp.data.user) setUser(resp.data.user);
+      } catch  {
+        // ignore
+      }
+    };
+    load();
+    return () => (mounted = false);
+  }, []);
   const menu = [
     { icon: <LayoutDashboard size={20} />, text: "Dashboard", path: "/guide" },
     { icon: <CalendarCheck size={20} />, text: "Đặt chỗ", path: "/guide/bookings" },
@@ -48,16 +65,32 @@ const GuideSidebar = ({ isOpen, setIsOpen }) => {
 
         <div className="p-4 border-t border-gray-50 bg-gray-50/50">
           <div className={`flex items-center ${isOpen ? '' : 'justify-center'}`}>
-            <img src="https://ui-avatars.com/api/?name=Guide+User&background=0D8ABC&color=fff" alt="Avatar" className="w-10 h-10 rounded-xl object-cover shadow-sm" />
+            <img
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.fullname || 'Guide User')}&background=0D8ABC&color=fff`}
+              alt="Avatar"
+              className="w-10 h-10 rounded-xl object-cover shadow-sm"
+            />
             {isOpen && (
               <div className="ml-3 flex-1 overflow-hidden">
-                <h4 className="text-sm font-semibold text-gray-800 truncate">Guide User</h4>
-                <p className="text-xs text-gray-500 truncate">guide@example.com</p>
+                <h4 className="text-sm font-semibold text-gray-800 truncate">{user?.fullname || 'Guide User'}</h4>
+                <p className="text-xs text-gray-500 truncate">{user?.email || 'guide@example.com'}</p>
               </div>
             )}
           </div>
           {isOpen && (
-            <button className="mt-4 flex items-center justify-center gap-2 w-full py-2 text-sm font-medium text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+            <button
+              onClick={async () => {
+                try {
+                  await axiosClient.post('/auth/logout');
+                } catch  {
+                  // ignore
+                }
+                localStorage.removeItem('token');
+                delete axiosClient.defaults.headers.common['Authorization'];
+                navigate('/guide/login');
+              }}
+              className="mt-4 flex items-center justify-center gap-2 w-full py-2 text-sm font-medium text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            >
               <LogOut size={16} />
               <span>Đăng xuất</span>
             </button>

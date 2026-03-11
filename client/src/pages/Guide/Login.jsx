@@ -1,20 +1,41 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosClient from "../../api/axios";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Thay bằng logic gọi API thực tế và lưu token
-    if (username === "admin" && password === "123456") {
-      setError("");
-      navigate("/guide");
-    } else {
-      setError("Tên đăng nhập hoặc mật khẩu không đúng.");
+    setError("");
+    setLoading(true);
+    try {
+      const resp = await axiosClient.post("/auth/login", {
+        email,
+        password,
+      });
+
+      if (resp.data && resp.data.success) {
+        const token = resp.data.token;
+        // Lưu token vào localStorage
+        localStorage.setItem("token", token);
+        // Thiết lập header mặc định cho axios client
+        axiosClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        // Điều hướng tới dashboard hướng dẫn viên
+        navigate("/guide");
+      } else {
+        setError(resp.data.message || "Đăng nhập không thành công.");
+      }
+    } catch (err) {
+      const msg = err?.response?.data?.message || "Lỗi kết nối tới server.";
+      setError(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,11 +47,11 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-slate-700 mb-2">Tên đăng nhập</label>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Email</label>
             <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-medium"
             />
@@ -49,8 +70,12 @@ const Login = () => {
 
           {error && <div className="text-rose-600 font-medium">{error}</div>}
 
-          <button type="submit" className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg rounded-[2.5rem] shadow-xl transition-all">
-            Đăng nhập
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg rounded-[2.5rem] shadow-xl transition-all disabled:opacity-50"
+          >
+            {loading ? "Đang xử lý..." : "Đăng nhập"}
           </button>
         </form>
 
