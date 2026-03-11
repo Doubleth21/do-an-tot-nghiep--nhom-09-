@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TourController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\BookingController;
 use Illuminate\Support\Facades\Route;
 
@@ -86,6 +87,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     });
 });
+Route::prefix('admin/accounts')->group(function () {
+    Route::get('/', [UserController::class, 'index']); // Xem danh sách
+    Route::get('/{id}', [UserController::class, 'show']); // Xem chi tiết
+    Route::post('/', [UserController::class, 'store']); // tour_guide: thêm tour_guide
+    Route::match(['put','patch'], '/{id}', [UserController::class, 'update']); // cập nhật theo role
+    Route::delete('/{id}', [UserController::class, 'destroy']); // xóa theo role
+});
+
 
 //Mặc định apiResource sẽ trỏ tới 5 phương thức mặc định trong controller api (index, show, update, store, destroy)
 // Nếu tạo thêm các phương thức mới trong controller api thì cần phải khai báo thêm trong route
