@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('check.role:admin,tour_guide')->group(function () {
         // Admin routes sẽ được thêm ở đây
         // Quản lý Tour (Admin / Tour Guide)
+        Route::get('tour/my', [TourController::class, 'myTours']);
         Route::apiResource('tour', TourController::class);
 
         // Lấy booking của 1 tour
@@ -87,13 +88,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     });
 });
-Route::prefix('admin/accounts')->group(function () {
-    Route::get('/', [UserController::class, 'index']); // Xem danh sách
-    Route::get('/{id}', [UserController::class, 'show']); // Xem chi tiết
-    Route::post('/', [UserController::class, 'store']); // tour_guide: thêm tour_guide
-    Route::match(['put','patch'], '/{id}', [UserController::class, 'update']); // cập nhật theo role
-    Route::delete('/{id}', [UserController::class, 'destroy']); // xóa theo role
-});
+Route::prefix('admin/accounts')
+    ->middleware(['auth:sanctum', 'check.role:admin,tour_guide'])
+    ->group(function () {
+        Route::get('/', [UserController::class, 'index']); // Xem danh sách
+        Route::get('/{id}', [UserController::class, 'show']); // Xem chi tiết
+        Route::post('/', [UserController::class, 'store']); // Tạo mới tài khoản (mặc định role=tour_guide)
+        Route::match(['put','patch'], '/{id}', [UserController::class, 'update']); // Cập nhật
+        Route::delete('/{id}', [UserController::class, 'destroy']); // Xóa
+    });
 
 
 //Mặc định apiResource sẽ trỏ tới 5 phương thức mặc định trong controller api (index, show, update, store, destroy)

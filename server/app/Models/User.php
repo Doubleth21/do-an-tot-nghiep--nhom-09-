@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Testing\Fluent\Concerns\Has;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -68,6 +69,15 @@ class User extends Authenticatable
     protected $attributes = [
         'role' => self::ROLE_USER,
     ];
+
+    /**
+     * Các tour được phân công cho hướng dẫn viên.
+     */
+    public function assignedTours(): BelongsToMany
+    {
+        return $this->belongsToMany(Tour::class, 'tour_guides', 'user_id', 'tour_id')
+            ->withPivot(['assigned_at']);
+    }
 
     //Kiểm tra xem người dùng có phải là ROLE_ADMIN hay không
     public function isRoleAdmin(){

@@ -14,21 +14,20 @@ class BookingController extends Controller
     // Optional query parameter `status` to filter by booking.status
     public function index(Request $request)
     {
-        $user = auth('api')->user();
-<<<<<<< HEAD
+        // Dự án đang dùng Sanctum với guard auth:sanctum => lấy user qua $request->user()
+        $user = $request->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
+
         $status = $request->query('status'); // pending, confirmed, cancel_requested, cancelled, completed
-=======
->>>>>>> 122123209cf8c67ca380e3a630c622e63346da15
 
         $query = Booking::with(['user', 'tour']);
         if ($user->role !== 'admin') {
             $query->where('user_id', $user->user_id);
         }
 
-        if (in_array($status, ['pending', 'confirmed', 'cancel_requested', 'cancelled', 'completed'])) {
+        if (in_array($status, ['pending', 'confirmed', 'cancel_requested', 'cancelled', 'completed'], true)) {
             $query->where('status', $status);
         }
 
@@ -46,14 +45,12 @@ class BookingController extends Controller
         }
 
         // Kiểm tra quyền: chỉ chủ booking hoặc admin mới xem được
-        $user = auth('api')->user();
-<<<<<<< HEAD
+        $user = request()->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-=======
->>>>>>> 122123209cf8c67ca380e3a630c622e63346da15
-        if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
+
+        if ($user->role !== 'admin' && (int) $booking->user_id !== (int) $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -70,15 +67,12 @@ class BookingController extends Controller
             'travel_date' => 'nullable|date|after_or_equal:today',
         ]);
 
-        $user = auth('api')->user();
-<<<<<<< HEAD
+        $user = $request->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-=======
->>>>>>> 122123209cf8c67ca380e3a630c622e63346da15
-        $tour = Tour::find($validated['tour_id']);
 
+        $tour = Tour::find($validated['tour_id']);
         if (!$tour) {
             return response()->json(['message' => 'Tour not found'], 404);
         }
@@ -115,16 +109,13 @@ class BookingController extends Controller
             return response()->json(['message' => 'Booking not found'], 404);
         }
 
-        $user = auth('api')->user();
-<<<<<<< HEAD
+        $user = $request->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-=======
->>>>>>> 122123209cf8c67ca380e3a630c622e63346da15
 
         // Chỉ chủ booking hoặc admin mới cập nhật được
-        if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
+        if ($user->role !== 'admin' && (int) $booking->user_id !== (int) $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -170,13 +161,17 @@ class BookingController extends Controller
             return response()->json(['message' => 'Booking not found'], 404);
         }
 
-        $user = auth('api')->user();
-        if ($booking->user_id !== $user->user_id) {
+        $user = request()->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        if ((int) $booking->user_id !== (int) $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         // chỉ được gửi yêu cầu khi đang ở trạng thái pending hoặc confirmed
-        if (!in_array($booking->status, ['pending', 'confirmed'])) {
+        if (!in_array($booking->status, ['pending', 'confirmed'], true)) {
             return response()->json([
                 'message' => 'Cannot request cancellation when status is ' . $booking->status
             ], 400);
@@ -201,21 +196,18 @@ class BookingController extends Controller
             return response()->json(['message' => 'Booking not found'], 404);
         }
 
-        $user = auth('api')->user();
-<<<<<<< HEAD
+        $user = request()->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-=======
->>>>>>> 122123209cf8c67ca380e3a630c622e63346da15
 
         // Chỉ chủ booking hoặc admin mới xóa được
-        if ($user->role !== 'admin' && $booking->user_id !== $user->user_id) {
+        if ($user->role !== 'admin' && (int) $booking->user_id !== (int) $user->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         // Chỉ được xóa booking với status pending hoặc cancelled
-        if (!in_array($booking->status, ['pending', 'cancelled'])) {
+        if (!in_array($booking->status, ['pending', 'cancelled'], true)) {
             return response()->json([
                 'message' => 'Cannot delete booking with status ' . $booking->status
             ], 400);
@@ -226,16 +218,13 @@ class BookingController extends Controller
         return response()->json(['message' => 'Booking deleted successfully']);
     }
 
-    // GET /api/booking/user/{user_id} - Lấy tất cả booking của 1 user (Admin only)
+    // GET /api/user/{user_id}/bookings - Lấy tất cả booking của 1 user (Admin only)
     public function userBookings($user_id)
     {
-        $user = auth('api')->user();
-<<<<<<< HEAD
+        $user = request()->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-=======
->>>>>>> 122123209cf8c67ca380e3a630c622e63346da15
 
         if ($user->role !== 'admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -248,18 +237,15 @@ class BookingController extends Controller
         return response()->json($bookings);
     }
 
-    // GET /api/booking/tour/{tour_id} - Lấy tất cả booking của 1 tour (Admin/TourGuide only)
+    // GET /api/tour/{tour_id}/bookings - Lấy tất cả booking của 1 tour (Admin/TourGuide only)
     public function tourBookings($tour_id)
     {
-        $user = auth('api')->user();
-<<<<<<< HEAD
+        $user = request()->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-=======
->>>>>>> 122123209cf8c67ca380e3a630c622e63346da15
 
-        if (!in_array($user->role, ['admin', 'tour_guide'])) {
+        if (!in_array($user->role, ['admin', 'tour_guide'], true)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tour extends Model
 {
@@ -20,4 +21,13 @@ class Tour extends Model
         'status',
         'price',
     ];
+
+    /**
+     * Các hướng dẫn viên được phân công cho tour.
+     */
+    public function guides(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'tour_guides', 'tour_id', 'user_id')
+            ->withPivot(['assigned_at']);
+    }
 }

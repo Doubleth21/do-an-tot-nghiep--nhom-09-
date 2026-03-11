@@ -33,6 +33,7 @@ return [
     |
     */
 
+    // Chọn guard Sanctum để xác thực Bearer token (personal_access_tokens)
     'guard' => ['web'],
 
     /*

@@ -68,24 +68,56 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validate dữ liệu đầu vào
+        // Hỗ trợ đăng nhập bằng email hoặc username
         $validated = $request->validate([
-            'email' => 'required|email',
+            'login' => 'required|string',
             'password' => 'required|string',
         ], [
-            'email.required' => 'Email là bắt buộc',
-            'email.email' => 'Email không hợp lệ',
+            'login.required' => 'Email hoặc username là bắt buộc',
             'password.required' => 'Mật khẩu là bắt buộc',
         ]);
 
-        // Tìm người dùng bằng email
-        $user = User::where('email', $validated['email'])->first();
+        $login = $validated['login'];
 
-        // Kiểm tra xem người dùng có tồn tại và mật khẩu có đúng không
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        // Nếu login là email hợp lệ thì tìm theo email, ngược lại tìm theo username
+        $user = filter_var($login, FILTER_VALIDATE_EMAIL)
+            ? User::where('email', $login)->first()
+            : User::where('username', $login)->first();
+
+        // Kiểm tra mật khẩu.
+        // DB hiện có dữ liệu legacy lưu plain-text (ví dụ "123456"), Hash::check sẽ throw RuntimeException
+        // "This password does not use the Bcrypt algorithm". Vì vậy xử lý an toàn:
+        // - Nếu password đã là hash: dùng Hash::check
+        // - Nếu password là plain-text: so sánh trực tiếp và re-hash lại để chuẩn hoá dữ liệu
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Email hoặc mật khẩu không chính xác',
+                'message' => 'Thông tin đăng nhập hoặc mật khẩu không chính xác',
+            ], 401);
+        }
+
+        $passwordOk = false;
+        try {
+            $passwordOk = Hash::check($validated['password'], $user->password);
+        } catch (\RuntimeException $e) {
+            $passwordOk = false;
+        }
+
+        if (!$passwordOk) {
+            // Fallback cho dữ liệu legacy (plain-text)
+            if (hash_equals((string) $user->password, (string) $validated['password'])) {
+                $passwordOk = true;
+
+                // Chuẩn hoá: hash lại mật khẩu theo bcrypt để lần sau login không lỗi nữa
+                $user->password = Hash::make($validated['password']);
+                $user->save();
+            }
+        }
+
+        if (!$passwordOk) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Thông tin đăng nhập hoặc mật khẩu không chính xác',
             ], 401);
         }
 
