@@ -6,30 +6,37 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    protected $table = 'bookings';
+    protected $table = 'booking';
     protected $primaryKey = 'booking_id';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
-        'user_id',
+        'customer_id',
         'tour_id',
-        'quantity',
+        'schedule_id',
+        'booking_date',
+        'num_people',
         'total_price',
         'status',
-        'notes',
-        'booking_date',
-        'travel_date',
+        'payment_status',
+        'note',
     ];
 
-    // Relationship: Booking thuộc về User
-    public function user()
+    // Relationship: Booking thuộc về Customer
+    public function customer()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'customer_id');
     }
 
     // Relationship: Booking thuộc về Tour
     public function tour()
     {
         return $this->belongsTo(Tour::class, 'tour_id', 'tour_id');
+    }
+
+    // Relationship: Booking thuộc về DepartureSchedule
+    public function schedule()
+    {
+        return $this->belongsTo(DepartureSchedule::class, 'schedule_id', 'schedule_id');
     }
 }
