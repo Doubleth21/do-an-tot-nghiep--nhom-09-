@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminLayout from "./layout/Admin_layout.jsx";
+import Home from "./pages/Home.jsx";
 import TourList from "./pages/Admin/Tour/List.jsx";
 import TourForm from "./pages/Admin/Tour/Create.jsx";
 import CategoryList from "./pages/Admin/CategoriesTour/List.jsx";
@@ -20,6 +21,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="categories" element={<CategoryList />} />
           <Route path="categories/add" element={<AddCategory />} />
