@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\DepartureSchedule;
 
 class Tour extends Model
 {
@@ -20,4 +21,9 @@ class Tour extends Model
         'status',
         'price',
     ];
+
+    public function departureSchedules()
+    {
+        return $this->hasMany(DepartureSchedule::class, 'tour_id', 'tour_id');
+    }
 }

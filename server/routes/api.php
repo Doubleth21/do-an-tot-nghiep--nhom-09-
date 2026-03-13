@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\DepartureScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -68,6 +69,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Lấy booking của 1 tour
         Route::get('/tour/{tour_id}/bookings', [BookingController::class, 'tourBookings']);
+
+        // Quản lý lịch khởi hành (Admin / Tour Guide)
+        Route::get('/tour/{tour_id}/departure-schedules', [DepartureScheduleController::class, 'byTour']);
+        Route::apiResource('departure-schedules', DepartureScheduleController::class);
     });
 
     // Chỉ Admin
