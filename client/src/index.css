@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+/* Custom helpers */
+.card-hover:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 12px 30px rgba(2,6,23,0.08); }
+.badge-gradient { background: linear-gradient(90deg,#06b6d4,#3b82f6); }
+.rating-star { color: #f59e0b; }

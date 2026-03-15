@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminLayout from "./layout/Admin_layout.jsx";
-import Home from "./pages/Home.jsx";
+import Home from "./pages/Home/Home.jsx";
 import TourList from "./pages/Admin/Tour/List.jsx";
 import TourForm from "./pages/Admin/Tour/Create.jsx";
 import CategoryList from "./pages/Admin/CategoriesTour/List.jsx";
@@ -8,6 +8,9 @@ import AddCategory from "./pages/Admin/CategoriesTour/Create.jsx";
 import EditCategory from "./pages/Admin/CategoriesTour/Edit.jsx";
 import EditTour from "./pages/Admin/Tour/Edit.jsx";
 import GuideLogin from "./pages/Guide/Login.jsx";
+import About from "./pages/Home/About.jsx";
+import News from "./pages/Home/News.jsx";
+import Contact from "./pages/Home/Contact.jsx";
 import GuideLayout from "./layout/Guide_layout.jsx";
 import GuideDashboard from "./pages/Guide/Dashboard.jsx";
 import GuideBookings from "./pages/Guide/Bookings.jsx";
@@ -42,6 +45,9 @@ function App() {
           <Route path="profile" element={<GuideProfile />} />
         </Route>
         <Route path="/guide/login" element={<GuideLogin />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </BrowserRouter>
   );
